@@ -1,0 +1,16 @@
+.DS_Store
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+*.bundle
+*.gem
+*.so
+*.o
+*.a
+mkmf.log
