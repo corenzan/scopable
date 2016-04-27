@@ -2,6 +2,11 @@
 
 > Apply scopes to your query based on available parameters
 
+[![Code Climate](https://codeclimate.com/github/haggen/scopable/badges/gpa.svg)](https://codeclimate.com/github/haggen/scopable)
+[![Test Coverage](https://codeclimate.com/github/haggen/scopable/badges/coverage.svg)](https://codeclimate.com/github/haggen/scopable/coverage)
+[![Build](https://travis-ci.org/haggen/scopable.svg)](https://travis-ci.org/haggen/scopable)
+
+
 ## Installation
 
 Add this line to your application's Gemfile:
