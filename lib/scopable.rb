@@ -38,7 +38,7 @@
       # When :required is true and
       # there's no value present and no
       # default set it will apply #none.
-      # required = scope[:required]
+      required = scope[:required]
 
       # Array with the names of actions
       # you'd like to ignore this scope.
@@ -59,7 +59,7 @@
 
       # If value still nil and the scope
       # is required exit with #none.
-      # break scoped_resource.none if required && value.nil?
+      break scoped_resource.none if required && value.nil?
 
       # Apple :only and :except rules.
       value = nil if except.present? && Array.wrap(except).map(&:to_s).include?(action_name)
