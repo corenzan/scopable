@@ -2,8 +2,8 @@
 
 > Apply model scopes based on request parameters.
 
-[![Code Climate](https://codeclimate.com/github/haggen/scopable/badges/gpa.svg)](https://codeclimate.com/github/haggen/scopable)
-[![Test Coverage](https://codeclimate.com/github/haggen/scopable/badges/coverage.svg)](https://codeclimate.com/github/haggen/scopable/coverage)
+[![Code Climate](https://codeclimate.com/github/haggen/scopable/badges/gpa.svg?1)](https://codeclimate.com/github/haggen/scopable)
+[![Test Coverage](https://codeclimate.com/github/haggen/scopable/badges/coverage.svg?1)](https://codeclimate.com/github/haggen/scopable/coverage)
 [![Build](https://travis-ci.org/haggen/scopable.svg)](https://travis-ci.org/haggen/scopable)
 
 ## Installation
