@@ -16,11 +16,15 @@ gem 'scopable'
 
 And then execute:
 
-    $ bundle
+```shell
+$ bundle
+```
 
 Or install it yourself with:
 
-    $ gem install scopable
+```shell
+$ gem install scopable
+```
 
 ## Usage
 
