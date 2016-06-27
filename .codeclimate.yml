@@ -1,7 +1,8 @@
 ---
 engines:
-  duplication:
+  rubocop:
     enabled: true
-    config:
-      languages:
-      - ruby
+
+ratings:
+   paths:
+   - "**.rb"
