@@ -1,0 +1,10 @@
+Style/Documentation:
+  Enabled: no
+Metrics/LineLength:
+  Max: 128
+Metrics/MethodLength:
+  Max: 32
+Style/Lambda:
+  EnforcedStyle: literal
+Style/EmptyCaseCondition:
+  Enabled: false
