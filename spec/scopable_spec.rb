@@ -51,43 +51,54 @@ describe Scopable do
   #
   # Test two optional scopes, with 0, 1, and 2 matching parameters.
   #
-  describe 'with two optional scope' do
+  describe 'with two optional scopes' do
     let :controller do
       Class.new(Controller) do
-        scope :search
-        scope :page
+        scope :color
+        scope :size
       end
     end
 
-    context 'with no matching parameters' do
+    context 'without parameters' do
       subject :action do
         controller.new
       end
 
-      it 'should skip the scope' do
+      it 'should skip the scopes' do
         expect(action.relation.scopes).to be_empty
       end
     end
 
-    context 'with one matching parameter' do
+    context 'with parameter matching the first scope' do
       subject :action do
-        controller.new(nil, search: 'test')
+        controller.new(nil, color: 'black')
       end
 
-      it 'should apply one of the scopes' do
+      it 'should apply only the first scope' do
         expect(action.relation.scopes.size).to eq(1)
-        expect(action.relation.scopes).to include(search: 'test')
+        expect(action.relation.scopes).to include(color: 'black')
       end
     end
 
-    context 'with two matching parameters' do
+    context 'with parameter matching the second scope' do
       subject :action do
-        controller.new(nil, search: 'test', page: 2)
+        controller.new(nil, size: 'm')
+      end
+
+      it 'should apply only the second scope' do
+        expect(action.relation.scopes.size).to eq(1)
+        expect(action.relation.scopes).to include(size: 'm')
+      end
+    end
+
+    context 'with parameters matching both scopes' do
+      subject :action do
+        controller.new(nil, size: 'm', color: 'black')
       end
 
       it 'should apply both scopes' do
         expect(action.relation.scopes.size).to eq(2)
-        expect(action.relation.scopes).to include(search: 'test', page: 2)
+        expect(action.relation.scopes).to include(size: 'm', color: 'black')
       end
     end
   end
