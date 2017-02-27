@@ -9,7 +9,6 @@ engines:
     config:
       languages:
       - ruby
-
 ratings:
    paths:
    - "lib/**.rb"
