@@ -1,6 +1,6 @@
 # Scopable
 
-> Apply model scopes based on request parameters.
+> Apply or skip model scopes based on options and request parameters.
 
 [![Code Climate](https://codeclimate.com/github/haggen/scopable/badges/gpa.svg?1)](https://codeclimate.com/github/haggen/scopable)
 [![Test Coverage](https://codeclimate.com/github/haggen/scopable/badges/coverage.svg?1)](https://codeclimate.com/github/haggen/scopable/coverage)
@@ -56,8 +56,8 @@ Another example:
 class PostController < ApplicationController
   include Scopable
 
-  scope :by_date, param: :date do |scoped_model, value|
-    scoped_model.where(created_at: Date.parse(value))
+  scope :by_date, param: :date do |relation, value|
+    relation.where(created_at: Date.parse(value))
   end
 
   scope :by_author, param: :author
@@ -70,16 +70,13 @@ class PostController < ApplicationController
 end
 ```
 
-Based on the example above, if your parameters looked like this:
+Now say your URL look like this:
 
-```ruby
-{
-  date: '6/1/2016',
-  author: '2'
-}
+```
+/posts?date=2016-1-6&author=2
 ```
 
-The final query would be:
+The resulting relation would be:
 
 ```ruby
 Post.where(created_at: '6/1/2016').by_author(2).order(created_at: :desc)
@@ -87,19 +84,37 @@ Post.where(created_at: '6/1/2016').by_author(2).order(created_at: :desc)
 
 **Note that order matters!** The scopes will be applied in the same order they are configured.
 
+Also note values like `true/false`, `on/off`, `yes/no` are treated like boolean, and when the value is evaluated to `true` or `false` the scope is called with no arguments, or skipped, respectively.
+
+```ruby
+scope :active
+```
+
+With a URL like this:
+
+```ruby
+/?active=yes
+```
+
+Would be equivalent to:
+
+```ruby
+Model.active
+```
+
 ### Options
 
 No option is required. By default it assumes both scope and parameter have the same name.
 
 Key         | Description
-------------|----------------------------------------------------------------------------------------
+------------|--------------------------------------------------------------------------------------------------------------
 `:param`    | Name of the parameter that activates the scope.
 `:default`  | Default value for the scope in case the parameter is missing.
-`:force`    | Force a value to the scope regardless of the parameters.
-`:required` | Calls `#none` on the model parameter is absent and no default value is given.
+`:force`    | Force a value to the scope regardless of the request parameters.
+`:required` | Calls `#none` on the model if parameter is absent and no default value is given.
 `:only`     | The scope will only be applied to these actions.
 `:except`   | The scope will be applied to all actions except these.
-`&block`    | Block will be called in the context of the action and will be given the model and value.
+`&block`    | Block will be called in the context of the action and will be given the current relation and evaluated value.
 
 ## Contributing
 
@@ -108,3 +123,7 @@ Key         | Description
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+# License
+
+See [LICENSE.txt](LICENSE.txt).
