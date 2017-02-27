@@ -102,7 +102,7 @@ Would be equivalent to:
 Model.active
 ```
 
-### Options
+## Options
 
 No option is required. By default it assumes both scope and parameter have the same name.
 
@@ -124,6 +124,6 @@ Key         | Description
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
 
-# License
+## License
 
 See [LICENSE.txt](LICENSE.txt).
