@@ -60,7 +60,8 @@ module Scopable
 
       # For advanced scopes that require more than a method call on the model.
       # When a block is given, it is ran no matter the scope value.
-      # The proc will be given the model being scoped and the resulting value from the options above, and it'll be executed inside the context of the controller's action.
+      # The proc will be given the model being scoped and the resulting value from the
+      # options above, and it'll be executed inside the context of the controller's action.
       block = options[:block]
 
       if block.nil? && value.nil?
