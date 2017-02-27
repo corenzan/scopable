@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Scopable::VERSION
   spec.authors       = ['Arthur Corenzan']
   spec.email         = ['arthur@corenzan.com']
-  spec.summary       = %q{Apply or skip model scopes based on given options and request parameters.}
+  spec.summary       = %q{Apply or skip model scopes based on options and request parameters.}
   # spec.description   = %q{}
   spec.homepage      = 'https://github.com/haggen/scopable'
   spec.license       = 'MIT'
