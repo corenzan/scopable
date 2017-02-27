@@ -1,95 +1,88 @@
- module Scopable
+module Scopable
   extend ActiveSupport::Concern
 
-  included do
-    cattr_reader :scopes do
-      Hash.new
-    end
-
-    helper_method :active_scopes
+  def scopes
+    self.class.scopes
   end
 
-  def active_scopes
-    scopes.map do |name, scope|
-      name if scope[:active]
-    end.compact
-  end
-
-  def scoped(resource, params)
-    scopes.reduce(resource) do |scoped_resource, scope|
-
-      # Scopable expects a scope (method) with
-      # the same name of the scope.
+  def scoped(model, params)
+    scopes.reduce(model) do |relation, scope|
       name, scope = *scope
 
-      # By default Scopable will look for
-      # a parameter with same name of the scope.
-      # You can provide a :param option to change that.
-      param = scope[:param]
-
-      # When the parameter is not present
-      # you can set a default value.
-      default = scope[:default]
-
-      # When you don't want the value
-      # coming in the request parameters.
-      force = scope[:force]
-
-      # When :required is true and
-      # there's no value present and no
-      # default set it will apply #none.
-      required = scope[:required]
-
-      # Array with the names of actions
-      # you'd like to ignore this scope.
-      except = scope[:except]
-
-      # Array with the names of actions
-      # this scopes will be applied for.
+      # Controller actions where this scope should be applied.
+      # Accepts either a literal value or a lambda. nil with disable the option.
       only = scope[:only]
+      only = instance_exec(&only) if only.respond_to?(:call)
 
-      # The block will be invoked in the
-      # context of the action and will receive
-      # both the resource and the value of the scope.
+      # Enfore :only option.
+      break relation unless only.nil? || Array.wrap(only).map(&:to_s).include?(action_name)
+
+      # Controller actions where this scope should be ignored.
+      # Accepts either a literal value or a lambda. nil with disable the option.
+      except = scope[:except]
+      except = instance_exec(&except) if except.respond_to?(:call)
+
+      # Enfore :except option.
+      break relation if except.present? && Array.wrap(except).map(&:to_s).include?(action_name)
+
+      # Name of the request parameters which value will be used in this scope.
+      # Defaults to the name of the scope.
+      param = scope.fetch(:param, name)
+
+      # Use the value from the request parameter or fall back to the default.
+      value = params[param]
+
+      # If parameter is not present use the :default option.
+      # Accepts either a literal value or a lambda.
+      value = scope[:default] if value.nil?
+
+      # Forces the scope to use the given value given in the :force option.
+      # Accepts either a literal value or a lambda.
+      value = scope[:force] if scope.key?(:force)
+
+      # If either :default or :force options were procs, evaluate them.
+      value = instance_exec(&value) if value.respond_to?(:call)
+
+      # The :required option makes sure there's a value present, otherwise return an empty scope (Model#none).
+      required = scope[:required]
+      required = instance_exec(&required) if required.respond_to?(:call)
+
+      # Enforce the :required option.
+      return relation.none if required && value.nil?
+
+      # Parses values like 'on/off', 'true/false', and 'yes/no' to an actual boolean value.
+      case value.to_s
+      when /\A(false|no|off)\z/
+        value = false
+      when /\A(true|yes|on)\z/
+        value = true
+      end
+
+      # For advanced scopes that require more than a method call on the model.
+      # When a block is given, it is ran no matter the scope value.
+      # The proc will be given the model being scoped and the resulting value from the options above, and it'll be executed inside the context of the controller's action.
       block = scope[:block]
 
-      # A value can be forced, come from the
-      # request parameters or have a default.
-      value = force || params[param || name] || default
+      if block.nil? && value.nil?
+        break relation
+      end
 
-      # If value still nil and the scope
-      # is required exit with #none.
-      break scoped_resource.none if required && value.nil?
-
-      # Apple :only and :except rules.
-      value = nil if except.present? && Array.wrap(except).map(&:to_s).include?(action_name)
-      value = nil unless only.nil? || Array.wrap(only).map(&:to_s).include?(action_name)
-
-      # Values like 'off', 'false' and 'no' are
-      # considered signals to disable the scope
-      # and treated like the value's empty.
-      value = nil if value.to_s =~ /\A(false|no|off)\z/
-
-      # Values like 'on', 'true' and 'yes' are
-      # considered signals to tell the scope is binary:
-      # either on or off, and receives no argument.
-      value = true if value.to_s =~ /\A(true|yes|on)\z/
-
-      if value.blank?
-        scope.update(active: false)
-        scoped_resource
+      case
+      when block.present?
+        instance_exec(relation, value, &block)
+      when value == true
+        relation.send(name)
       else
-        scope.update(active: true)
-        if block.present?
-          instance_exec(scoped_resource, value, &block)
-        else
-          scoped_resource.send(name, value)
-        end
+        relation.send(name, value)
       end
     end
   end
 
   module ClassMethods
+    def scopes
+      @scopes ||= {}
+    end
+
     def scope(name, options = {}, &block)
       scopes.store name, options.merge(block: block)
     end

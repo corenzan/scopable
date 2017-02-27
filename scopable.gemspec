@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Scopable::VERSION
   spec.authors       = ['Arthur Corenzan']
   spec.email         = ['arthur@corenzan.com']
-  spec.summary       = %q{Apply model scopes based on request parameters.}
+  spec.summary       = %q{Apply or skip model scopes based on given options and request parameters.}
   # spec.description   = %q{}
   spec.homepage      = 'https://github.com/haggen/scopable'
   spec.license       = 'MIT'
@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'activesupport', '>= 3.2', '< 5.1'
+  spec.add_runtime_dependency 'activesupport', '>= 3.2'
   # spec.add_runtime_dependency 'railties', '>= 4.2.0', '< 5.1'
 
   spec.add_development_dependency 'bundler', '~> 1.7'

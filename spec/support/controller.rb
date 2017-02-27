@@ -1,16 +1,19 @@
 class Controller
-  attr_accessor :params
-
-  def initialize(params = {})
-    @params = params.freeze
-  end
-
-  def self.helper_method(*args)
-  end
-
   include Scopable
 
-  def scoped_model
-    scoped(Model, params)
+  def initialize(action_name = nil, params = {})
+    @action_name, @params = action_name, params.freeze
+  end
+
+  def params
+    @params
+  end
+
+  def action_name
+    @action_name.to_s
+  end
+
+  def relation
+    scoped(Model.new, params)
   end
 end

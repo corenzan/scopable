@@ -1,9 +1,9 @@
 class Model
-  def self.scopes
-    @@scopes ||= {}
+  def scopes
+    @scopes ||= {}
   end
 
-  def self.method_missing(name, value)
+  def method_missing(name, value = true)
     scopes.store(name, value)
     self
   end
