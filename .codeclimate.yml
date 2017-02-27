@@ -1,4 +1,3 @@
----
 engines:
   rubocop:
     enabled: true
@@ -10,7 +9,7 @@ engines:
       languages:
       - ruby
 ratings:
-   paths:
-   - "lib/**.rb"
+  paths:
+  - "lib/**.rb"
 exclude_paths:
 - spec/**/*
