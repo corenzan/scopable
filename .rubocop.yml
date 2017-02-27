@@ -1159,7 +1159,7 @@ Style/Documentation:
 Metrics/LineLength:
   Max: 128
 Metrics/MethodLength:
-  Max: 32
+  Max: 36
 Style/Lambda:
   EnforcedStyle: literal
 Style/EmptyCaseCondition:
