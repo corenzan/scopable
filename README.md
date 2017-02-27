@@ -1,10 +1,11 @@
+[![RubyGems](https://img.shields.io/gem/dt/scopable.svg)](https://rubygems.org/gems/scopable)
+[![Build](https://img.shields.io/travis/haggen/scopable.svg)](https://travis-ci.org/haggen/scopable)
+[![Code Climate](https://img.shields.io/codeclimate/github/haggen/scopable.svg)](https://codeclimate.com/github/haggen/scopable)
+[![Test Coverage](https://img.shields.io/codeclimate/coverage/github/haggen/scopable.svg)](https://codeclimate.com/github/haggen/scopable/coverage)
+
 # Scopable
 
 > Apply or skip model scopes based on options and request parameters.
-
-[![Code Climate](https://codeclimate.com/github/haggen/scopable/badges/gpa.svg?1)](https://codeclimate.com/github/haggen/scopable)
-[![Test Coverage](https://codeclimate.com/github/haggen/scopable/badges/coverage.svg?1)](https://codeclimate.com/github/haggen/scopable/coverage)
-[![Build](https://travis-ci.org/haggen/scopable.svg)](https://travis-ci.org/haggen/scopable)
 
 ## Installation
 
@@ -116,6 +117,10 @@ Key         | Description
 `:except`   | The scope will be applied to all actions except these.
 `&block`    | Block will be called in the context of the action and will be given the current relation and evaluated value.
 
+## License
+
+See [LICENSE](LICENSE).
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/scopable/fork )
@@ -123,7 +128,3 @@ Key         | Description
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
-
-## License
-
-See [LICENSE.txt](LICENSE.txt).
