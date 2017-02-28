@@ -64,7 +64,7 @@ module Scopable
       # options above, and it'll be executed inside the context of the controller's action.
       block = options[:block]
 
-      if block.nil? && value.nil?
+      if block.nil? && value.blank?
         next relation
       end
 

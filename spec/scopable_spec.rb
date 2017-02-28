@@ -18,7 +18,7 @@ describe Scopable do
   end
 
   #
-  # Test single scope, no options, with and without matching parameters.
+  # Test single scope, no options.
   #
   describe 'with one optional scope' do
     let :controller do
@@ -27,7 +27,7 @@ describe Scopable do
       end
     end
 
-    context 'without matching parameters' do
+    context 'with the parameter absent' do
       subject :action do
         controller.new
       end
@@ -37,13 +37,23 @@ describe Scopable do
       end
     end
 
-    context 'with one matching parameter' do
+    context 'with the parameter present' do
       subject :action do
         controller.new(nil, search: 'test')
       end
 
       it 'should apply the scope' do
         expect(action.relation.scopes).to include(search: 'test')
+      end
+    end
+
+    context 'with the parameter present but blank' do
+      subject :action do
+        controller.new(nil, search: '')
+      end
+
+      it 'should skip the scope' do
+        expect(action.relation.scopes).to be_empty
       end
     end
   end
