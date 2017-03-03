@@ -1,7 +1,7 @@
-[![RubyGems](https://img.shields.io/gem/dt/scopable.svg)](https://rubygems.org/gems/scopable)
-[![Build](https://img.shields.io/travis/haggen/scopable.svg)](https://travis-ci.org/haggen/scopable)
-[![Code Climate](https://img.shields.io/codeclimate/github/haggen/scopable.svg)](https://codeclimate.com/github/haggen/scopable)
-[![Test Coverage](https://img.shields.io/codeclimate/coverage/github/haggen/scopable.svg)](https://codeclimate.com/github/haggen/scopable/coverage)
+[![RubyGems](https://img.shields.io/gem/dt/scopable.svg?style=flat-square)](https://rubygems.org/gems/scopable)
+[![Build](https://img.shields.io/travis/haggen/scopable.svg?style=flat-square)](https://travis-ci.org/haggen/scopable)
+[![Code Climate](https://img.shields.io/codeclimate/github/haggen/scopable.svg?style=flat-square)](https://codeclimate.com/github/haggen/scopable)
+[![Test Coverage](https://img.shields.io/codeclimate/coverage/github/haggen/scopable.svg?style=flat-square)](https://codeclimate.com/github/haggen/scopable/coverage)
 
 # Scopable
 
