@@ -18,7 +18,7 @@ gem 'scopable'
 And then execute:
 
 ```shell
-$ bundle
+$ bundle install
 ```
 
 Or install it yourself with:
@@ -29,7 +29,7 @@ $ gem install scopable
 
 ## Usage
 
-Configure scopes in your controller:
+First you need to set scopes in your controller:
 
 ```ruby
 class PostsController < ApplicationController
@@ -41,28 +41,48 @@ class PostsController < ApplicationController
 end
 ```
 
-Then apply it to your model:
+Then apply them when querying the model:
 
 ```ruby
-def index
-  @posts = scoped(Post, params)
+class PostsController < ApplicationController
+  include Scopable
+
+  scope :search, param: :q
+
+  def index
+    @posts = scoped(Post, params)
+  end
 end
 ```
 
-Now whenever the parameter `q` is present in `params`, `#search` will be called on your model passing the parameter's value as argument.
+Now whenever the parameter `q` is present in `params`, the scope `#search` will be called on your model and given the value of `params[:q]` as argument. Otherwise you would have to write something like this:
 
-Another example:
+```ruby
+  if params[:q].present?
+    @posts = Post.search(params[:q])
+  else
+    @posts = Post.all
+  end
+```
+
+What would be fine, except you usually have multiple scopes, that might get combined depending on the presence or absence of parameters to produce the final query. Look how simple it becomes when using Scopable:
 
 ```ruby
 class PostController < ApplicationController
   include Scopable
 
-  scope :by_date, param: :date do |relation, value|
-    relation.where(created_at: Date.parse(value))
+  # Filter by category.
+  scope :category do |relation, value|
+    relation.where(category_id: value.to_i)
   end
 
-  scope :by_author, param: :author
+  # Fix N+1.
+  scope :includes, force: :author
 
+  # Pagination.
+  scope :page, default: 1
+
+  # Sort by creation date.
   scope :order, force: { created_at: :desc }
 
   def index
@@ -71,39 +91,23 @@ class PostController < ApplicationController
 end
 ```
 
-Now say your URL look like this:
+Now say a request is made looking like this:
 
 ```
-/posts?date=2016-1-6&author=2
+/posts?category=2
 ```
 
-The resulting relation would be:
+The resulting query would be:
 
 ```ruby
-Post.where(created_at: '6/1/2016').by_author(2).order(created_at: :desc)
+Post.where(category_id: 2).includes(:author).page(1).order(created_at: :desc)
 ```
 
-**Note that order matters!** The scopes will be applied in the same order they are configured.
+Please note that **order matters**. The scopes will be applied in the same order they are configured.
 
-Also note values like `true/false`, `on/off`, `yes/no` are treated like boolean, and when the value is evaluated to `true` or `false` the scope is called with no arguments, or skipped, respectively.
+Also values like `true/false`, `on/off`, `yes/no` are **cast as boolean**, and when given a boolean value the scope is either called with no arguments or skipped entirely. For instance, if you set a scope like `scope :draft` then request the URL `/posts?draft=yes` it would be like just calling `Post.draft`. But if you request `/posts?draft=no` it does nothing.
 
-```ruby
-scope :active
-```
-
-With a URL like this:
-
-```ruby
-/?active=yes
-```
-
-Would be equivalent to:
-
-```ruby
-Model.active
-```
-
-## Options
+### Options
 
 No option is required. By default it assumes both scope and parameter have the same name.
 
@@ -112,19 +116,11 @@ Key         | Description
 `:param`    | Name of the parameter that activates the scope.
 `:default`  | Default value for the scope in case the parameter is missing.
 `:force`    | Force a value to the scope regardless of the request parameters.
-`:required` | Calls `#none` on the model if parameter is absent and no default value is given.
-`:only`     | The scope will only be applied to these actions.
-`:except`   | The scope will be applied to all actions except these.
-`&block`    | Block will be called in the context of the action and will be given the current relation and evaluated value.
+`:required` | Calls `#none` on the model if parameter is absent (blank or nil) and there's no default value set.
+`:only`     | String, Symbol or an Array of those. The scope will **only** be applied to these actions.
+`:except`   | String, Symbol or an Array of those. The scope will be applied to all actions **except** these.
+`&block`    | Block will be called in the context of the controller's action and will be given two parameters: the current relation and evaluated value.
 
 ## License
 
 See [LICENSE](LICENSE).
-
-## Contributing
-
-1. Fork it ( https://github.com/[my-github-username]/scopable/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
