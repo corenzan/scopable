@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Arthur Corenzan']
   spec.email         = ['arthur@corenzan.com']
   spec.summary       = %q{Apply or skip model scopes based on options and request parameters.}
-  # spec.description   = %q{}
-  spec.homepage      = 'https://github.com/haggen/scopable'
+  spec.description   = %q{}
+  spec.homepage      = 'https://github.com/corenzan/scopable'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
