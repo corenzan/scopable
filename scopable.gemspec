@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Scopable::VERSION
   spec.authors       = ['Arthur Corenzan']
   spec.email         = ['arthur@corenzan.com']
-  spec.summary       = %q{Apply or skip model scopes based on options and request parameters.}
-  spec.description   = %q{}
+  spec.summary       = 'Change active scopes on a model based on given parameters.'
+  spec.description   = ''
   spec.homepage      = 'https://github.com/corenzan/scopable'
   spec.license       = 'MIT'
 
@@ -20,9 +20,8 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.2.2'
 
-  spec.add_runtime_dependency 'activesupport', '>= 3.2'
+  spec.add_runtime_dependency 'activesupport', '>= 5.0'
 
-  spec.add_development_dependency 'bundler', '~> 1.7'
-  spec.add_development_dependency 'rake', '~> 10.0'
-  spec.add_development_dependency 'rspec', '~> 3.5'
+  spec.add_development_dependency 'bundler', '~> 1.15'
+  spec.add_development_dependency 'minitest', '~> 5.10'
 end
