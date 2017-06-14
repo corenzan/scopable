@@ -6,7 +6,8 @@ class Scopable
     @model = model || self.class.model
   end
 
-  def apply(params)
+  def apply(params = {})
+    params.symbolize_keys!
     self.class.scopes.reduce(@model) do |relation, scope|
       name, options = *scope
 
@@ -27,7 +28,7 @@ class Scopable
     end
   end
 
-  def self.apply(params)
+  def self.apply(params = {})
     new.apply(params)
   end
 
