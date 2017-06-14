@@ -1,3 +1,4 @@
-require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new('spec')
-task default: :spec
+task :test do
+  require_relative 'test/scopable_test.rb'
+end
+task default: :test
