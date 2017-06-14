@@ -1,11 +1,13 @@
-[![RubyGems](https://img.shields.io/gem/dt/scopable.svg?style=flat-square)](https://rubygems.org/gems/scopable)
-[![Build](https://img.shields.io/travis/corenzan/scopable.svg?style=flat-square)](https://travis-ci.org/corenzan/scopable)
-[![Code Climate](https://img.shields.io/codeclimate/github/corenzan/scopable.svg?style=flat-square)](https://codeclimate.com/github/corenzan/scopable)
-[![Test Coverage](https://img.shields.io/codeclimate/coverage/github/corenzan/scopable.svg?style=flat-square)](https://codeclimate.com/github/corenzan/scopable/coverage)
+<div align="center">
+  <a href="https://rubygems.org/gems/scopable"><img alt="RubyGems" src="https://img.shields.io/gem/dt/scopable.svg?style=flat-square"></a>
+  <a href="https://travis-ci.org/corenzan/scopable"><img alt="Build" src="https://img.shields.io/travis/corenzan/scopable.svg?style=flat-square"></a>
+  <a href="https://codeclimate.com/github/corenzan/scopable"><img alt="Code Climate" src="https://img.shields.io/codeclimate/github/corenzan/scopable.svg?style=flat-square"></a>
+  <a href="https://codeclimate.com/github/corenzan/scopable/coverage"><img alt="Test Coverage" src="https://img.shields.io/codeclimate/coverage/github/corenzan/scopable.svg?style=flat-square"></a>
+</div>
 
 # Scopable
 
-> Apply or skip model scopes based on given parameters.
+> Easy parametric model scoping in Rails.
 
 ## Installation
 
