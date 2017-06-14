@@ -19,7 +19,7 @@ class TestModel < Minitest::Test
       scope :age
     end
     Person.age(21)
-    assert_equal(Person.scopes[:age], 21)
+    assert_equal(21, Person.scopes[:age])
   end
 end
 
@@ -30,8 +30,8 @@ class TestScopable < Minitest::Test
     PostScope = Class.new(Scopable) do 
       model :post
     end
-    assert_equal(PostScope.new.instance_variable_get(:@model), :post)
-    assert_equal(PostScope.new(:article).instance_variable_get(:@model), :article)
+    assert_equal(:post, PostScope.new.instance_variable_get(:@model))
+    assert_equal(:article, PostScope.new(:article).instance_variable_get(:@model))
   end
 
   test '#apply and .apply' do
@@ -41,8 +41,8 @@ class TestScopable < Minitest::Test
     assert_raises(ArgumentError) do
       CarScope.new.apply
     end
-    assert_equal(CarScope.new.apply({}), :car)
-    assert_equal(CarScope.apply({}), :car)
+    assert_equal(:car, CarScope.new.apply({}))
+    assert_equal(:car, CarScope.apply({}))
   end
 
   test 'no options' do
@@ -55,5 +55,17 @@ class TestScopable < Minitest::Test
     end
     UserScope.apply(active: true)
     assert_equal(User.scopes[:active], true)
+  end
+
+  test 'param option' do
+    Content = Class.new(Model) do
+      scope :search
+    end
+    ContentScope = Class.new(Scopable) do 
+      model Content
+      scope :search, param: :q
+    end
+    ContentScope.apply(q: 'mermaids')
+    assert_equal('mermaids', Content.scopes[:search])
   end
 end
