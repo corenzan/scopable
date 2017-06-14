@@ -2,70 +2,78 @@ require 'minitest/autorun'
 require 'active_support/testing/declarative'
 
 require_relative '../lib/scopable'
-require_relative 'support/model'
-
-class TestModel < Minitest::Test
-  extend ActiveSupport::Testing::Declarative
-
-  test 'defines class method' do
-    Pie = Class.new(Model) do
-      scope :tasty
-    end
-    assert_respond_to(Pie, :tasty)
-  end
-
-  test 'tracks scope calls' do
-    Person = Class.new(Model) do
-      scope :age
-    end
-    Person.age(21)
-    assert_equal(21, Person.scopes[:age])
-  end
-end
 
 class TestScopable < Minitest::Test
   extend ActiveSupport::Testing::Declarative
 
-  test '#initialize' do
-    PostScope = Class.new(Scopable) do 
-      model :post
+  test '#initialize with zero arguments' do
+    polygon_scope = Class.new(Scopable) do 
+      model :square
     end
-    assert_equal(:post, PostScope.new.instance_variable_get(:@model))
-    assert_equal(:article, PostScope.new(:article).instance_variable_get(:@model))
+    assert_equal(:square, polygon_scope.new.instance_variable_get(:@model))
   end
 
-  test '#apply and .apply' do
-    CarScope = Class.new(Scopable) do
+  test '#initialize with 1 argument' do
+    polygon_scope = Class.new(Scopable) do 
+      model :square
+    end
+    assert_equal(:circle, polygon_scope.new(:circle).instance_variable_get(:@model))
+  end
+
+  test '#apply with empty params passes through' do
+    vehicle_scope = Class.new(Scopable) do
       model :car
     end
-    assert_raises(ArgumentError) do
-      CarScope.new.apply
+    assert_equal(:car, vehicle_scope.new.apply)
+  end
+
+  test '.apply is a shorthand of #initialize + #apply' do
+    vehicle_scope = Class.new(Scopable) do
+      model :bike
     end
-    assert_equal(:car, CarScope.new.apply({}))
-    assert_equal(:car, CarScope.apply({}))
+    assert_equal(:bike, vehicle_scope.apply)
+  end
+
+  test 'no matching scope passes through' do
+    pet = OpenStruct.new(mammal: nil)
+    pet_scope = Class.new(Scopable) do 
+      model pet
+      scope :mammal=
+    end
+    assert_nil(pet_scope.apply.mammal)
   end
 
   test 'no options' do
-    User = Class.new(Model) do
-      scope :active
+    person = OpenStruct.new(profile: nil)
+    person_scope = Class.new(Scopable) do 
+      model person
+      scope :profile=
     end
-    UserScope = Class.new(Scopable) do 
-      model User
-      scope :active
-    end
-    UserScope.apply(active: true)
-    assert_equal(User.scopes[:active], true)
+    person_scope.apply('profile=' => 'fat')
+    assert_equal('fat', person.profile)
   end
 
-  test 'param option' do
-    Content = Class.new(Model) do
-      scope :search
+  test 'truthy values' do
+    user = OpenStruct.new(active: nil)
+    user_scope = Class.new(Scopable) do 
+      model user
+      scope :active=
     end
-    ContentScope = Class.new(Scopable) do 
-      model Content
-      scope :search, param: :q
+    user_scope.apply('active=' => 'true')
+    assert(user.active)
+    user_scope.apply('active=' => 'yes')
+    assert(user.active)
+    user_scope.apply('active=' => 'on')
+    assert(user.active)
+  end
+
+  test 'option :param' do
+    book = OpenStruct.new(query: nil)
+    book_scope = Class.new(Scopable) do 
+      model book
+      scope :query=, param: :q
     end
-    ContentScope.apply(q: 'mermaids')
-    assert_equal('mermaids', Content.scopes[:search])
+    book_scope.apply(q: 'mermaids')
+    assert_equal('mermaids', book.query)
   end
 end
