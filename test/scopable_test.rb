@@ -145,4 +145,8 @@ class TestScopable < Minitest::Test
     assert_equal(:none, account_scope.apply)
     assert_equal('123', account_scope.apply(number: '123').scopes[:number])
   end
+
+  test 'option :if'
+  test 'option :unless'
+  test 'option :block'
 end
