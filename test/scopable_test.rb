@@ -60,11 +60,11 @@ class TestScopable < Minitest::Test
       scope :active=
     end
     user_scope.apply('active=' => 'true')
-    assert(user.active)
+    assert_equal(true, user.active)
     user_scope.apply('active=' => 'yes')
-    assert(user.active)
+    assert_equal(true, user.active)
     user_scope.apply('active=' => 'on')
-    assert(user.active)
+    assert_equal(true, user.active)
   end
 
   test 'option :param' do
