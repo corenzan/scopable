@@ -67,6 +67,20 @@ class TestScopable < Minitest::Test
     assert_equal(true, user.active)
   end
 
+  test 'falsy values' do
+    user = OpenStruct.new(active: nil)
+    user_scope = Class.new(Scopable) do 
+      model user
+      scope :active=
+    end
+    user_scope.apply('active=' => 'false')
+    assert_equal(false, user.active)
+    user_scope.apply('active=' => 'no')
+    assert_equal(false, user.active)
+    user_scope.apply('active=' => 'off')
+    assert_equal(false, user.active)
+  end
+
   test 'option :param' do
     book = OpenStruct.new(query: nil)
     book_scope = Class.new(Scopable) do 
