@@ -17,9 +17,19 @@ class Scopable
       # Resolve a value for the scope.
       value = options[:value] || params[param] || options[:default]
 
-      if value.nil?
-        options[:required] ? relation.none : relation
-      elsif options[:block].present?
+      # When a nil value was given either skip the scope or bail with #none (if the required options was used).
+      break options[:required] ? relation.none : relation if value.nil?
+
+      # Cast boolean-like strings.
+      case value.to_s
+      when /\A(false|no|off)\z/
+        value = false
+      when /\A(true|yes|on)\z/
+        value = true
+      end
+
+      # When a block is present, use that, otherwise call the scope method.
+      if options[:block].present?
         options[:block].call(relation, value)
       elsif value == true
         relation.send(name)
