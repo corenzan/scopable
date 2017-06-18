@@ -11,19 +11,20 @@ class Scopable
     self.class.scopes.reduce(@model) do |relation, scope|
       name, options = *scope
 
-      value = options[:value] || params[options[:param] || name] || options[:default]
+      # Resolve param name.
+      param = options[:param] || name
 
-      case
-      when options[:block].present?
-        block.call(relation, value)
-      when value == true
+      # Resolve a value for the scope.
+      value = options[:value] || params[param] || options[:default]
+
+      if value.nil?
+        options[:required] ? relation.none : relation
+      elsif options[:block].present?
+        options[:block].call(relation, value)
+      elsif value == true
         relation.send(name)
-      when value.present?
-        relation.send(name, value)
-      when options[:required]
-        relation.none
       else
-        relation
+        relation.send(name, value)
       end
     end
   end

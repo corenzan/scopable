@@ -35,14 +35,14 @@ class TestScopable < Minitest::Test
   extend ActiveSupport::Testing::Declarative
 
   test '#initialize with zero arguments' do
-    polygon_scope = Class.new(Scopable) do 
+    polygon_scope = Class.new(Scopable) do
       model :square
     end
     assert_equal(:square, polygon_scope.new.instance_variable_get(:@model))
   end
 
   test '#initialize with 1 argument' do
-    polygon_scope = Class.new(Scopable) do 
+    polygon_scope = Class.new(Scopable) do
       model :square
     end
     assert_equal(:circle, polygon_scope.new(:circle).instance_variable_get(:@model))
@@ -66,7 +66,7 @@ class TestScopable < Minitest::Test
 
   test 'without matching scope passes through' do
     pet = Model.new(:mammal)
-    pet_scope = Class.new(Scopable) do 
+    pet_scope = Class.new(Scopable) do
       model pet
       scope :mammal
     end
@@ -75,7 +75,7 @@ class TestScopable < Minitest::Test
 
   test 'no options' do
     person = Model.new(:profile)
-    person_scope = Class.new(Scopable) do 
+    person_scope = Class.new(Scopable) do
       model person
       scope :profile
     end
@@ -84,7 +84,7 @@ class TestScopable < Minitest::Test
 
   test 'truthy values' do
     user = Model.new(:active)
-    user_scope = Class.new(Scopable) do 
+    user_scope = Class.new(Scopable) do
       model user
       scope :active
     end
@@ -95,7 +95,7 @@ class TestScopable < Minitest::Test
 
   test 'falsy values' do
     user = Model.new(:active)
-    user_scope = Class.new(Scopable) do 
+    user_scope = Class.new(Scopable) do
       model user
       scope :active
     end
@@ -106,7 +106,7 @@ class TestScopable < Minitest::Test
 
   test 'option :param' do
     book = Model.new(:query)
-    book_scope = Class.new(Scopable) do 
+    book_scope = Class.new(Scopable) do
       model book
       scope :query, param: :q
     end
@@ -115,7 +115,7 @@ class TestScopable < Minitest::Test
 
   test 'option :value' do
     file = Model.new(:name)
-    file_scope = Class.new(Scopable) do 
+    file_scope = Class.new(Scopable) do
       model file
       scope :name, value: 'a file'
     end
@@ -124,7 +124,7 @@ class TestScopable < Minitest::Test
 
   test 'option :default' do
     directory = Model.new(:name)
-    directory_scope = Class.new(Scopable) do 
+    directory_scope = Class.new(Scopable) do
       model directory
       scope :name, default: 'system32'
     end
@@ -138,7 +138,7 @@ class TestScopable < Minitest::Test
         :none
       end
     end
-    account_scope = Class.new(Scopable) do 
+    account_scope = Class.new(Scopable) do
       model account
       scope :number, required: true
     end
@@ -148,5 +148,16 @@ class TestScopable < Minitest::Test
 
   test 'option :if'
   test 'option :unless'
-  test 'option :block'
+
+  test 'option :block' do
+    flower = Model.new(:family, :color)
+    flower_scope = Class.new(Scopable) do
+      model flower
+      scope :romantic do |relation, value|
+        relation.family('Rosaceae').color('red')
+      end
+    end
+    assert_equal('red', flower_scope.apply(romantic: true).scopes[:color])
+    assert_equal('Rosaceae', flower_scope.apply(romantic: true).scopes[:family])
+  end
 end
