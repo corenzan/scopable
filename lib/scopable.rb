@@ -2,16 +2,11 @@ require 'active_support'
 require 'active_support/core_ext'
 
 class Scopable
-  def initialize(model = nil)
+  attr_reader :model, :scopes
+
+  def initialize(model = nil, scopes = nil)
     @model = model || self.class.model
-  end
-
-  def scopes
-    self.class.scopes
-  end
-
-  def model
-    @model
+    @scopes = scopes || self.class.scopes
   end
 
   def delegator(relation, value, params)
