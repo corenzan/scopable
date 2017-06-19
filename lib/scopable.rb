@@ -36,7 +36,13 @@ class Scopable
       value = nil if value.respond_to?(:empty?) && value.empty?
 
       # When a nil value was given either skip the scope or bail with #none (if the required options was used).
-      break options[:required] ? relation.none : relation if value.nil?
+      if value.nil?
+        if options[:required]
+          break relation.none
+        else
+          next relation
+        end
+      end
 
       # Cast boolean-like strings.
       case value.to_s
