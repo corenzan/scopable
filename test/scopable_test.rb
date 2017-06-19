@@ -1,5 +1,8 @@
 require 'minitest/autorun'
 require 'active_support/testing/declarative'
+require 'simplecov'
+
+SimpleCov.start
 
 require_relative '../lib/scopable'
 require_relative 'support/model'
