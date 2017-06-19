@@ -146,14 +146,31 @@ class TestScopable < Minitest::Test
     assert_equal('123', account_scope.apply(number: '123').scopes[:number])
   end
 
-  test 'option :if'
-  test 'option :unless'
+  test 'option :if' do
+    record = Model.new(:sealed)
+    record_scope = Class.new(Scopable) do
+      model record
+      scope :sealed, if: -> { params[:lawyer] }
+    end
+    assert_nil(record_scope.apply(sealed: true).scopes[:sealed])
+    assert_equal(true, record_scope.apply(sealed: true, lawyer: true).scopes[:sealed])
+  end
+
+  test 'option :unless' do
+    record = Model.new(:sealed)
+    record_scope = Class.new(Scopable) do
+      model record
+      scope :sealed, unless: -> { !params[:lawyer] }
+    end
+    assert_nil(record_scope.apply(sealed: true).scopes[:sealed])
+    assert_equal(true, record_scope.apply(sealed: true, lawyer: true).scopes[:sealed])
+  end
 
   test 'option :block' do
     flower = Model.new(:family, :color)
     flower_scope = Class.new(Scopable) do
       model flower
-      scope :romantic do |relation, value|
+      scope :romantic do |relation|
         relation.family('Rosaceae').color('red')
       end
     end
