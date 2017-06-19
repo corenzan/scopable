@@ -101,6 +101,24 @@ Key         | Description
 `:unless`   | ...
 `&block`    | Block will be used to produce the resulting relation with two parameters: the relation at this step and the scope value from params.
 
+## Collaboration
+
+If you'd like to contribute to the project, in any form, you're most welcome, but please bear in mind that as it is with any open-source software your suggestions are subject to the discretion of the project maintainers, and what you see as an issue, someone else may see as a feature.
+
+We encourage you to:
+
+- Open a new issue with suggestions, concerns, or problems you may have.
+- Chip in existing discussions and present your opinion on the subject.
+- Send pull-requests with test covered bug fixes or new features.
+- Send pull-requests with new tests you miss in the suite.
+
+Remember to:
+
+- Be respectful.
+- Use proper grammar in discussions and in commit messages.
+- Follow the established coding style.
+- Explain why you're making the changes in a pull-request.
+
 ## License
 
 [The MIT License](LICENSE.md) © 2013 Arthur Corenzan
