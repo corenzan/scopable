@@ -6,9 +6,28 @@ class Scopable
     @model = model || self.class.model
   end
 
+  def scopes
+    self.class.scopes
+  end
+
+  def model
+    @model
+  end
+
+  def delegator(relation, value, params)
+    SimpleDelegator.new(relation).tap do |delegator|
+      delegator.define_singleton_method(:value) do
+        value
+      end
+      delegator.define_singleton_method(:params) do
+        params
+      end
+    end
+  end
+
   def apply(params = {})
     params.symbolize_keys!
-    self.class.scopes.reduce(@model) do |relation, scope|
+    scopes.reduce(model) do |relation, scope|
       name, options = *scope
 
       # Resolve param name.
@@ -30,7 +49,7 @@ class Scopable
 
       # When a block is present, use that, otherwise call the scope method.
       if options[:block].present?
-        options[:block].call(relation, value)
+        delegator(relation, value, params).instance_exec(&options[:block])
       elsif value == true
         relation.send(name)
       else

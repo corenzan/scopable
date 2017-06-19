@@ -170,8 +170,8 @@ class TestScopable < Minitest::Test
     flower = Model.new(:family, :color)
     flower_scope = Class.new(Scopable) do
       model flower
-      scope :romantic do |relation|
-        relation.family('Rosaceae').color('red')
+      scope :romantic do
+        family('Rosaceae').color('red')
       end
     end
     assert_equal('red', flower_scope.apply(romantic: true).scopes[:color])
