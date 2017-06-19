@@ -49,12 +49,12 @@ First let's create a new directory named `scopes` along with `models` and `contr
 class PostScope < Scopable
   model Post
 
-  scope :search do |relation, value|
-    relation.where('title LIKE ?', value)
+  scope :search do
+    where('title LIKE ?', value)
   end
 
-  scope :published_on do |relation, value|
-    relation.where(published_at: value.to_time)
+  scope :published_on do
+    where(published_at: value.to_time)
   end
 end
 ```
