@@ -32,6 +32,9 @@ class Scopable
       # Resolve a value for the scope.
       value = options[:value] || params[param] || options[:default]
 
+      # When value is empty treat it as nil.
+      value = nil if value.respond_to?(:empty?) && value.empty?
+
       # When a nil value was given either skip the scope or bail with #none (if the required options was used).
       break options[:required] ? relation.none : relation if value.nil?
 
