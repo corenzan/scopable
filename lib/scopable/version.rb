@@ -1,3 +1,3 @@
-module Scopable
+class Scopable
   VERSION = '2.0.0'.freeze
 end
