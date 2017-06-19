@@ -26,7 +26,8 @@ class Scopable
   end
 
   def apply(params = {})
-    params.symbolize_keys!
+    params = params.with_indifferent_access
+
     scopes.reduce(model) do |relation, scope|
       name, options = *scope
 
