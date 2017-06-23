@@ -64,7 +64,7 @@ Finally, in `PostsController` you use `PostScope.resolve` to conditionally resol
 ```ruby
 class PostsController < ApplicationController
   def index
-    @posts = PostScope.apply(scope_params)
+    @posts = PostScope.resolve(scope_params)
   end
 
   private
