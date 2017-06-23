@@ -9,22 +9,22 @@
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Simply add it to your Gemfile.
 
 ```ruby
 gem 'scopable'
 ```
 
-And then execute:
+And update your Gems.
 
 ```shell
-$ bundle install
+$ bundle update
 ```
 
-Or install it yourself with:
+Please note that as of version 2.0 **the API has changed**. If you're **already using version 1.x** and don't want to update your application right now, you should stick with it:
 
-```shell
-$ gem install scopable
+```ruby
+gem 'scopable', '~> 1.0'
 ```
 
 ## About
@@ -59,7 +59,7 @@ class PostScope < Scopable
 end
 ```
 
-Finally, in `PostsController` you use `PostScope` to conditionally apply the scopes based on incoming parameters.
+Finally, in `PostsController` you use `PostScope.resolve` to conditionally resolve the scopes based on given parameters.
 
 ```ruby
 class PostsController < ApplicationController
@@ -75,19 +75,19 @@ class PostsController < ApplicationController
 end
 ```
 
-Now when any combination of the parameters `search` and `published_on` are present, their conditions are going to be applied. i.e. If youre request path looks like this:
+Now when any combination of the parameters `search` and `published_on` are present, their respective conditions are going to be applied on the relation. i.e. If your request path looks like this:
 
 ```
 /?search=bananas&published_on=2007-07-19
 ```
 
-`@posts` is going to be same as:
+`@posts` will look like this:
 
 ```
 Post.where('title LIKE ?', 'bananas').where(published_on: '2007-07-19 00:00:00 +0000')
 ```
 
-You can also set some options when you're defining scopes for more advanced use cases. Read on.
+You can also pass some options when you're defining scopes for more advanced use cases. Read on.
 
 #### Options
 
