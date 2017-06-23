@@ -35,105 +35,105 @@ class ScopableTest < Minitest::Test
     model = Model.new
     scopable = Scopable.new(model, fuzzy: {})
     params = { fuzzy: 'fuzzy' }
-    assert_scope(scopable.apply(params), :fuzzy, 'fuzzy')
+    assert_scope(scopable.resolve(params), :fuzzy, 'fuzzy')
   end
 
   test 'multiple scopes, matching parameters' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: {}, jumbo: {})
     params = { fuzzy: 'fuzzy', jumbo: 'jumbo' }
-    assert_scope(scopable.apply(params), :fuzzy, 'fuzzy')
-    assert_scope(scopable.apply(params), :jumbo, 'jumbo')
+    assert_scope(scopable.resolve(params), :fuzzy, 'fuzzy')
+    assert_scope(scopable.resolve(params), :jumbo, 'jumbo')
   end
 
   test 'multiple scopes, missing one parameter' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: {}, jumbo: {})
     params = { jumbo: 'jumbo' }
-    assert_scope(scopable.apply(params), :jumbo, 'jumbo')
-    refute_scope(scopable.apply(params), :fuzzy)
+    assert_scope(scopable.resolve(params), :jumbo, 'jumbo')
+    refute_scope(scopable.resolve(params), :fuzzy)
   end
 
   test 'matching param with blank value' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: {})
     params = { fuzzy: '' }
-    refute_scope(scopable.apply(params), :fuzzy)
+    refute_scope(scopable.resolve(params), :fuzzy)
   end
 
   test 'absent param' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: {})
-    refute_scope(scopable.apply, :fuzzy)
+    refute_scope(scopable.resolve, :fuzzy)
   end
 
   test 'matching param with true-like value' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: {})
-    assert_scope(scopable.apply(fuzzy: 'on'), :fuzzy, true)
-    assert_scope(scopable.apply(fuzzy: 'yes'), :fuzzy, true)
-    assert_scope(scopable.apply(fuzzy: 'true'), :fuzzy, true)
+    assert_scope(scopable.resolve(fuzzy: 'on'), :fuzzy, true)
+    assert_scope(scopable.resolve(fuzzy: 'yes'), :fuzzy, true)
+    assert_scope(scopable.resolve(fuzzy: 'true'), :fuzzy, true)
   end
 
   test 'matching param with false-like value' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: {})
-    assert_scope(scopable.apply(fuzzy: 'no'), :fuzzy, false)
-    assert_scope(scopable.apply(fuzzy: 'off'), :fuzzy, false)
-    assert_scope(scopable.apply(fuzzy: 'false'), :fuzzy, false)
+    assert_scope(scopable.resolve(fuzzy: 'no'), :fuzzy, false)
+    assert_scope(scopable.resolve(fuzzy: 'off'), :fuzzy, false)
+    assert_scope(scopable.resolve(fuzzy: 'false'), :fuzzy, false)
   end
 
   test 'param option' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: { param: :f })
     params = { f: 'fuzzy' }
-    assert_scope(scopable.apply(params), :fuzzy, 'fuzzy')
+    assert_scope(scopable.resolve(params), :fuzzy, 'fuzzy')
   end
 
   test 'value option' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: { value: 'fuzzy' })
-    assert_scope(scopable.apply, :fuzzy, 'fuzzy')
+    assert_scope(scopable.resolve, :fuzzy, 'fuzzy')
   end
 
   test 'default option' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: { default: 'fuzzy' })
-    assert_scope(scopable.apply, :fuzzy, 'fuzzy')
+    assert_scope(scopable.resolve, :fuzzy, 'fuzzy')
     params = { fuzzy: 'jumbo' }
-    assert_scope(scopable.apply(params), :fuzzy, 'jumbo')
+    assert_scope(scopable.resolve(params), :fuzzy, 'jumbo')
   end
 
   test 'required option' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: { required: true })
-    assert_equal(:none, scopable.apply)
+    assert_equal(:none, scopable.resolve)
     params = { fuzzy: 'fuzzy' }
-    assert_scope(scopable.apply(params), :fuzzy, 'fuzzy')
+    assert_scope(scopable.resolve(params), :fuzzy, 'fuzzy')
   end
 
   test 'if option' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: { if: -> { params[:quack] } })
     params = { fuzzy: 'fuzzy' }
-    refute_scope(scopable.apply(params), :fuzzy)
+    refute_scope(scopable.resolve(params), :fuzzy)
     params = { fuzzy: 'fuzzy', quack: true }
-    assert_scope(scopable.apply(params), :fuzzy, 'fuzzy')
+    assert_scope(scopable.resolve(params), :fuzzy, 'fuzzy')
   end
 
   test 'unless option' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: { unless: -> { params[:quack] } })
     params = { fuzzy: 'fuzzy', quack: true }
-    refute_scope(scopable.apply(params), :fuzzy)
+    refute_scope(scopable.resolve(params), :fuzzy)
     params = { fuzzy: 'fuzzy' }
-    assert_scope(scopable.apply(params), :fuzzy, 'fuzzy')
+    assert_scope(scopable.resolve(params), :fuzzy, 'fuzzy')
   end
 
   test 'block option' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: { block: -> { jumbo(value) } })
     params = { fuzzy: 'fuzzy' }
-    assert_scope(scopable.apply(params), :jumbo, 'fuzzy')
+    assert_scope(scopable.resolve(params), :jumbo, 'fuzzy')
   end
 end

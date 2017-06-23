@@ -20,7 +20,7 @@ class Scopable
     end
   end
 
-  def apply(params = {})
+  def resolve(params = {})
     params = params.with_indifferent_access
 
     scopes.reduce(model) do |relation, scope|
@@ -73,8 +73,8 @@ class Scopable
     end
   end
 
-  def self.apply(params = {})
-    new.apply(params)
+  def self.resolve(params = {})
+    new.resolve(params)
   end
 
   def self.model(model = nil)
