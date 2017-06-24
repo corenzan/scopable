@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Scopable::VERSION
   spec.authors       = ['Arthur Corenzan']
   spec.email         = ['arthur@corenzan.com']
-  spec.summary       = 'Easy parametric model scoping in Rails.'
-  spec.description   = 'Scopable allows you to create Scope objects that resolves a chain of scopes on a given model based on a set of predefined rules and incoming parameters.'
+  spec.summary       = 'Easy parametric query building in Rails.'
+  spec.description   = 'Scopable allows you to create objects that produce complex queries based on incoming parameters hash which are testable and easy to understand.'
   spec.homepage      = 'https://github.com/corenzan/scopable'
   spec.license       = 'MIT'
 

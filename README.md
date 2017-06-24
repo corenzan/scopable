@@ -5,7 +5,7 @@
 
 # Scopable
 
-> Easy parametric model scoping in Rails.
+> Easy parametric query building in Rails.
 
 ## Installation
 
@@ -21,7 +21,7 @@ And update your Gems.
 $ bundle update
 ```
 
-Please note that as of version 2.0 **the API has changed**. If you're **already using version 1.x** and don't want to update your application right now, you should stick with it:
+Please note that as of version 2.0 **the API has drastically changed**. If you're **already using version 1.x** and don't want to update your application right now, you should stick with it:
 
 ```ruby
 gem 'scopable', '~> 1.0'
