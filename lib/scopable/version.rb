@@ -1,3 +1,3 @@
 class Scopable
-  VERSION = '2.0.0'.freeze
+  VERSION = '2.0.1'.freeze
 end
