@@ -31,6 +31,13 @@ class ScopableTest < Minitest::Test
     assert_includes(scopable.new.scopes, :jumbo)
   end
 
+  test 'always call #all' do
+    model = Model.new
+    scopable = Scopable.new(model, {})
+    params = {}
+    assert_scope(scopable.resolve(params), :all, true)
+  end
+
   test 'one scope, matching parameter' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: {})

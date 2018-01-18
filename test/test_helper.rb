@@ -22,6 +22,11 @@ class Model
     self
   end
 
+  def all
+    scopes.store(:all, true)
+    self
+  end
+
   def none
     :none
   end
