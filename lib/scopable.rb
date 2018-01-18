@@ -23,7 +23,7 @@ class Scopable
   def resolve(params = {})
     params = params.with_indifferent_access
 
-    scopes.reduce(model) do |relation, scope|
+    scopes.reduce(model.all) do |relation, scope|
       name, options = *scope
 
       # Resolve param name.
