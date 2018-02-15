@@ -137,10 +137,27 @@ class ScopableTest < Minitest::Test
     assert_scope(scopable.resolve(params), :fuzzy, 'fuzzy')
   end
 
-  test 'block option' do
+  test 'block option matching' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: { block: -> { jumbo(value) } })
     params = { fuzzy: 'fuzzy' }
     assert_scope(scopable.resolve(params), :jumbo, 'fuzzy')
+  end
+
+  test 'block option miss' do
+    model = Model.new
+    scopable = Scopable.new(model, fuzzy: { block: -> { jumbo(value) } })
+    params = {}
+    refute_scope(scopable.resolve(params), :jumbo)
+  end
+
+  test 'block delegator' do
+    model = Model.new
+    params = { fuzzy: 'fuzzy' }
+    scopable = Scopable.new(model, {})
+    delegator = scopable.delegator(model, 'fuzzy', params)
+    assert_respond_to(delegator, :all)
+    assert_equal('fuzzy', delegator.value)
+    assert_equal(params, delegator.params)
   end
 end
