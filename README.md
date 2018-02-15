@@ -99,7 +99,7 @@ Key         | Description
 `:required` | Calls `#none` on the model if parameter is absent (blank or nil) and there's no default value set.
 `:if`       | ...
 `:unless`   | ...
-`&block`    | Block will be used to produce the resulting relation with two parameters: the relation at this step and the scope value from params.
+`&block`    | Block will be executed in the context of the relation plus two local methods `value` and `params`.
 
 ## Collaboration
 
