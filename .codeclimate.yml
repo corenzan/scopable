@@ -2,5 +2,10 @@ version: "2"
 plugins:
   rubocop:
     enabled: true
+checks:
+  method-lines:
+    enabled: true
+    config:
+      threshold: 40
 exclude_patterns:
 - "test/"
