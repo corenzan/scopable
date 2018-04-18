@@ -62,6 +62,9 @@ class Scopable
         next relation if delegator(relation, value, params).instance_exec(&options[:unless])
       end
 
+      # Bail if the value is false or nil.
+      next relation if !value
+
       # When a block is present, use that, otherwise call the scope method.
       if options[:block].present?
         delegator(relation, value, params).instance_exec(&options[:block])
