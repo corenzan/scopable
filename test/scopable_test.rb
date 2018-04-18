@@ -74,7 +74,7 @@ class ScopableTest < Minitest::Test
     refute_scope(scopable.resolve, :fuzzy)
   end
 
-  test 'matching param with true-like value' do
+  test 'matching param with truthy value' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: {})
     assert_scope(scopable.resolve(fuzzy: 'on'), :fuzzy, true)
@@ -82,12 +82,12 @@ class ScopableTest < Minitest::Test
     assert_scope(scopable.resolve(fuzzy: 'true'), :fuzzy, true)
   end
 
-  test 'matching param with false-like value' do
+  test 'matching param with falsey value' do
     model = Model.new
     scopable = Scopable.new(model, fuzzy: {})
-    assert_scope(scopable.resolve(fuzzy: 'no'), :fuzzy, false)
-    assert_scope(scopable.resolve(fuzzy: 'off'), :fuzzy, false)
-    assert_scope(scopable.resolve(fuzzy: 'false'), :fuzzy, false)
+    refute_scope(scopable.resolve(fuzzy: 'no'), :fuzzy)
+    refute_scope(scopable.resolve(fuzzy: 'off'), :fuzzy)
+    refute_scope(scopable.resolve(fuzzy: 'false'), :fuzzy)
   end
 
   test 'param option' do
@@ -148,6 +148,13 @@ class ScopableTest < Minitest::Test
     model = Model.new
     scopable = Scopable.new(model, fuzzy: { block: -> { jumbo(value) } })
     params = {}
+    refute_scope(scopable.resolve(params), :jumbo)
+  end
+
+  test 'block option with falsey value' do
+    model = Model.new
+    scopable = Scopable.new(model, fuzzy: { block: -> { jumbo(value) } })
+    params = { fuzzy: false }
     refute_scope(scopable.resolve(params), :jumbo)
   end
 
