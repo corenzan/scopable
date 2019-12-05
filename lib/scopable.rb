@@ -54,16 +54,20 @@ class Scopable
 
       # Enforce 'if' option.
       if options[:if]
-        next relation unless delegator(relation, value, params).instance_exec(&options[:if])
+        unless delegator(relation, value, params).instance_exec(&options[:if])
+          next relation
+        end
       end
 
       # Enforce 'unless' option.
       if options[:unless]
-        next relation if delegator(relation, value, params).instance_exec(&options[:unless])
+        if delegator(relation, value, params).instance_exec(&options[:unless])
+          next relation
+        end
       end
 
       # Bail if the value is false or nil.
-      next relation if !value
+      next relation unless value
 
       # When a block is present, use that, otherwise call the scope method.
       if options[:block].present?
